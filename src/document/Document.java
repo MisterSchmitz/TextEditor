@@ -67,33 +67,54 @@ public abstract class Document {
 		// TODO: Implement this method so that you can call it from the 
 	    // getNumSyllables method in BasicDocument (module 1) and 
 	    // EfficientDocument (module 2).
-	    if (word.length()==0) {
-	    	return 0;
-	    }
-
-	    // Set number of syllables equal to number of separate vowel combinations
-	    String[] cons = word.split("[^AEIOUYaeiouy]+");
-	    int syls = cons.length;
-	    
-	    // If first letter in word is not a vowel, then subtract one syllable
-	    char firstLetter = word.charAt(0);
-	    if (!(firstLetter=="a".charAt(0) || firstLetter=="e".charAt(0) || firstLetter=="i".charAt(0) || firstLetter=="o".charAt(0) || firstLetter=="u".charAt(0) || firstLetter=="y".charAt(0))) { 
-	      syls--;
-	    }
-	    
-	    // If last letter in word is an e and e alone, handle special case
-	    if (word.length() > 1) {
-		    String lastLetters = cons[cons.length-1];
-		    char lastLetter = word.charAt(word.length()-1);
-		    if (lastLetter=="e".charAt(0) && lastLetters.equals("e")) {
-		      syls--;
-		      if (syls==0) {
-		      	syls = 1;
-		      }
-		    }
-	    }
-	    
-	    return syls;
+	    //System.out.print("Counting syllables in " + word + "...");
+		int numSyllables = 0;
+		boolean newSyllable = true;
+		String vowels = "aeiouy";
+		char[] cArray = word.toCharArray();
+		for (int i = 0; i < cArray.length; i++)
+		{
+		    if (i == cArray.length-1 && Character.toLowerCase(cArray[i]) == 'e' 
+		    		&& newSyllable && numSyllables > 0) {
+                numSyllables--;
+            }
+		    if (newSyllable && vowels.indexOf(Character.toLowerCase(cArray[i])) >= 0) {
+				newSyllable = false;
+				numSyllables++;
+			}
+			else if (vowels.indexOf(Character.toLowerCase(cArray[i])) < 0) {
+				newSyllable = true;
+			}
+		}
+		//System.out.println( "found " + numSyllables);
+		return numSyllables;		
+//	    if (word.length()==0) {
+//	    	return 0;
+//	    }
+//
+//	    // Set number of syllables equal to number of separate vowel combinations
+//	    String[] cons = word.split("[^AEIOUYaeiouy]+");
+//	    int syls = cons.length;
+//	    
+//	    // If first letter in word is not a vowel, then subtract one syllable
+//	    char firstLetter = word.charAt(0);
+//	    if (!(firstLetter=="a".charAt(0) || firstLetter=="e".charAt(0) || firstLetter=="i".charAt(0) || firstLetter=="o".charAt(0) || firstLetter=="u".charAt(0) || firstLetter=="y".charAt(0))) { 
+//	      syls--;
+//	    }
+//	    
+//	    // If last letter in word is an e and e alone, handle special case
+//	    if (word.length() > 1) {
+//		    String lastLetters = cons[cons.length-1];
+//		    char lastLetter = word.charAt(word.length()-1);
+//		    if (lastLetter=="e".charAt(0) && lastLetters.equals("e")) {
+//		      syls--;
+//		      if (syls==0) {
+//		      	syls = 1;
+//		      }
+//		    }
+//	    }
+//	    
+//	    return syls;
 	}
 	
 	/** A method for testing
