@@ -36,7 +36,7 @@ public class BasicDocument extends Document
 	{
 		//TODO: Implement this method in week 1 according to the comments above.  
 		// See the Module 1 support videos if you need help.
-	    return 0;
+	    return this.getTokens("[A-z]+").size();
 	}
 	
 	/**
@@ -56,7 +56,7 @@ public class BasicDocument extends Document
 	{
 	    //TODO: Implement this method.  See the Module 1 support videos 
         // if you need help.
-        return 0;
+        return this.getTokens("[^.!?]+").size();
 	}
 	
 	/**
@@ -81,9 +81,13 @@ public class BasicDocument extends Document
 		// expression for the syllable counting.  We recommend you implement 
 		// the helper function countSyllables in Document.java using a loop, 
 		// and then call it here on each word.
-        return 0;
+		int totalSyls = 0;
+		List<String> words = this.getTokens("[A-z]+");
+		for (String word : words) {
+			totalSyls += countSyllables(word.toLowerCase());
+		}
+        return totalSyls;
 	}
-	
 	
 	/* The main method for testing this class. 
 	 * You are encouraged to add your own tests.  */
@@ -95,6 +99,7 @@ public class BasicDocument extends Document
 		 * in the string, respectively.  You can use these examples to help clarify 
 		 * your understanding of how to count syllables, words, and sentences.
 		 */
+		
 		testCase(new BasicDocument("This is a test.  How many???  "
 		        + "Senteeeeeeeeeences are here... there should be 5!  Right?"),
 				16, 13, 5);
@@ -111,6 +116,11 @@ public class BasicDocument extends Document
 		testCase(new BasicDocument("Sentences?!"), 3, 1, 1);
 		testCase(new BasicDocument("Lorem ipsum dolor sit amet, qui ex choro quodsi moderatius, nam dolores explicari forensibus ad."),
 		         32, 15, 1);
+		
+//		BasicDocument tester = new BasicDocument("Splitting a string, it's as easy as 1 2 33! Right?");
+//		System.out.println(tester.getTokens("[^A-z0-9 ]+"));	// Keep only the special characters
+//		System.out.println(tester.getTokens("[A-z0-9]+"));		//
+//		System.out.println(tester.getTokens("[^ ,!?]+"));		// Keep the words, and keep apostrophes
 	}
 	
 }
