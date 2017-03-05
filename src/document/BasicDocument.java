@@ -84,7 +84,7 @@ public class BasicDocument extends Document
 		int totalSyls = 0;
 		List<String> words = this.getTokens("[A-z]+");
 		for (String word : words) {
-			totalSyls += countSyllables(word.toLowerCase());
+			totalSyls += countSyllables(word);
 		}
         return totalSyls;
 	}
