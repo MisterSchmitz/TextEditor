@@ -40,30 +40,20 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 		String prevWord = starter;			//	set "prevWord" to be starter
 		String w;
 		
-		// Do for all words
+		// Do for all words in source text beginning after starter word
 		for (int i=1; i<allWords.length; i++)  {
 
 			w = allWords[i];
-			//	if "prevWord" is already a node in the list
 			boolean matchFound = false;
-			int j=0;
-			while (!matchFound && j<wordList.size()) {
-				ListNode nodeToCheck = wordList.get(j); 
+			//	if "prevWord" is already a node in the list
+			ListIterator<ListNode> itr = wordList.listIterator();
+			while (!matchFound && itr.hasNext()) {
+				ListNode nodeToCheck = itr.next();
 				if(nodeToCheck.getWord().equals(prevWord)) {
 					nodeToCheck.addNextWord(w);
 					matchFound = true;
-					break;
 				}
-				j++;
 			}
-//			ListIterator<ListNode> itr = wordList.listIterator();
-//			while (!matchFound && itr.hasNext()) {
-//				ListNode nodeToCheck = itr.next();
-//				if(nodeToCheck.getWord().equals(prevWord)) {
-//					nodeToCheck.addNextWord(w);
-//					matchFound = true;
-//				}
-//			}
 			
 			// if "prevWord" is a 'new' word
 			if (!matchFound) {
@@ -77,18 +67,15 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 		
 //		Add starter as a NextWord for the last word in the source text.
 		String lastWord = allWords[allWords.length-1];
-//		System.out.println("Adding starter as a NextWord for the last word...");
 		// Find the node corresponding to lastWord
 		boolean matchFound = false;
-		int j=0;
-		while (!matchFound && j<wordList.size()) {
-			ListNode nodeToCheck = wordList.get(j); 
+		ListIterator<ListNode> itr = wordList.listIterator();
+		while (!matchFound && itr.hasNext()) {
+			ListNode nodeToCheck = itr.next();
 			if(nodeToCheck.getWord().equals(lastWord)) {
 				nodeToCheck.addNextWord(starter);
 				matchFound = true;
-				break;
 			}
-			j++;
 		}
 		if (!matchFound) {
 			ListNode newWordNode = new ListNode(lastWord);
@@ -119,9 +106,9 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 		int wordCount = 0;
 		while(wordCount < numWords-1) {
 			boolean matchFound = false;
-			int j=0;
-			while (!matchFound && j<=wordList.size()) {
-				ListNode nodeToCheck = wordList.get(j); 
+			ListIterator<ListNode> itr = wordList.listIterator();
+			while (!matchFound && itr.hasNext()) {
+				ListNode nodeToCheck = itr.next();
 				if(nodeToCheck.getWord().equals(currWord)) {
 					// Get random word from this node's NextWords
 					nextWord = nodeToCheck.getRandomNextWord(rnGenerator);
@@ -129,11 +116,9 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 					outputList.add(nextWord);
 					currWord = nextWord;
 					matchFound = true;
-					break;
 				}
-				j++;
 			}
-			
+
 			wordCount++;
 		}
 		
