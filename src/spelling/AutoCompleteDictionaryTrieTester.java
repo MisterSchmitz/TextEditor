@@ -52,6 +52,7 @@ public class AutoCompleteDictionaryTrieTester {
 	@Test
 	public void testSize()
 	{
+//		smallDict.printTree();
 		assertEquals("Testing size for empty dict", 0, emptyDict.size());
 		assertEquals("Testing size for small dict", 8, smallDict.size());
 		assertEquals("Testing size for large dict", 4438, largeDict.size());
@@ -64,6 +65,9 @@ public class AutoCompleteDictionaryTrieTester {
 		assertEquals("Testing isWord on empty: Hello", false, emptyDict.isWord("Hello"));
 		assertEquals("Testing isWord on small: Hello", true, smallDict.isWord("Hello"));
 		assertEquals("Testing isWord on large: Hello", true, largeDict.isWord("Hello"));
+
+		assertEquals("Testing isWord on small: hell", false, smallDict.isWord("hell"));
+		assertEquals("Testing isWord on large: hell", true, largeDict.isWord("hell"));
 		
 		assertEquals("Testing isWord on small: hello", true, smallDict.isWord("hello"));
 		assertEquals("Testing isWord on large: hello", true, largeDict.isWord("hello"));
@@ -159,8 +163,5 @@ public class AutoCompleteDictionaryTrieTester {
 		completions = smallDict.predictCompletions("x", 5);
 		assertEquals(0, completions.size());
 	}
-	
-	
-	
 	
 }

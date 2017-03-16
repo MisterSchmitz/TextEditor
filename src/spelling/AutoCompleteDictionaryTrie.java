@@ -39,8 +39,33 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 */
 	public boolean addWord(String word)
 	{
-	    //TODO: Implement this method.
-	    return false;
+		String wordLC = word.toLowerCase();
+	    int wordLength = wordLC.length();
+	    int charIndex = 0;
+	    	    
+	    TrieNode curr = root;
+	    TrieNode next = null;
+    
+	    // Iterate through each character of word
+	    while (charIndex < wordLength) {
+		    // Try inserting character
+	    	next = curr.insert(wordLC.charAt(charIndex));
+	    	// If character already exists, get child
+	    	if (next == null) {
+	    		next = curr.getChild(wordLC.charAt(charIndex));
+	    	}
+	    	curr = next;
+	    	charIndex++;
+	    }
+	    
+	    // After finishing iteration, if our landing point is already a word
+	    if (curr.endsWord()) {
+	    	return false;
+	    } else {
+	    	curr.setEndsWord(true);
+		    size++;
+		    return true;
+	    }
 	}
 	
 	/** 
@@ -48,9 +73,8 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 * as the number of TrieNodes in the trie.
 	 */
 	public int size()
-	{
-	    //TODO: Implement this method
-	    return 0;
+	{	
+	    return size;
 	}
 	
 	
@@ -59,8 +83,28 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	@Override
 	public boolean isWord(String s) 
 	{
-	    // TODO: Implement this method
-		return false;
+		if(s=="") {
+			return false;
+		}
+		
+		String wordLC = s.toLowerCase();
+	    int wordLength = wordLC.length();
+	    int charIndex = 0;
+	    TrieNode curr = root;
+   
+	    // Iterate through each character of word
+	    while (charIndex < wordLength) {
+	    	curr = curr.getChild(wordLC.charAt(charIndex));
+	    	if (curr == null) {
+	    		return false;
+	    	}
+	    	charIndex++;
+	    }
+	    
+	    if (curr.endsWord()) {
+	    	return true;
+	    }
+	    return false;	    
 	}
 
 	/** 
@@ -85,23 +129,36 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
      * @return A list containing the up to numCompletions best predictions
      */@Override
      public List<String> predictCompletions(String prefix, int numCompletions) 
-     {
-    	 // TODO: Implement this method
-    	 // This method should implement the following algorithm:
-    	 // 1. Find the stem in the trie.  If the stem does not appear in the trie, return an
-    	 //    empty list
-    	 // 2. Once the stem is found, perform a breadth first search to generate completions
-    	 //    using the following algorithm:
-    	 //    Create a queue (LinkedList) and add the node that completes the stem to the back
-    	 //       of the list.
-    	 //    Create a list of completions to return (initially empty)
-    	 //    While the queue is not empty and you don't have enough completions:
-    	 //       remove the first Node from the queue
-    	 //       If it is a word, add it to the completions list
-    	 //       Add all of its child nodes to the back of the queue
-    	 // Return the list of completions
-    	 
-         return null;
+     { 		
+    	String wordLC = prefix.toLowerCase();
+	    int wordLength = wordLC.length();
+	    int charIndex = 0;	    	    
+	    TrieNode curr = root;
+	    List<String> completions = new LinkedList<String>();
+	    LinkedList<TrieNode> q = new LinkedList<TrieNode>();
+    
+	    // Iterate through each character of prefix
+	    while (charIndex < wordLength) {
+	    	curr = curr.getChild(wordLC.charAt(charIndex));
+	    	if (curr == null) {
+	    		return completions;
+	    	}
+	    	charIndex++;
+	    }
+	    
+	    // Now we've reached the end of our stem. curr is the base
+	    q.add(curr);
+	    
+	    while (!q.isEmpty() && completions.size()<numCompletions) {
+	    	curr =  q.removeFirst();
+	    	if(curr.endsWord()) {
+	    		completions.add(curr.getText());
+	    	}
+	    	for (Character c : curr.getValidNextCharacters()) {
+	    		q.addLast(curr.getChild(c));
+	    	}
+	    }
+        return completions;
      }
 
  	// For debugging

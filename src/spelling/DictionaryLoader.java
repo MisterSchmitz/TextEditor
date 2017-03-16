@@ -47,7 +47,7 @@ public class DictionaryLoader {
                 numLoaded++;
             }
             if (numLoaded < nWords) {
-            	System.out.print("loadDicitonary Warning: End of dictionary file reached.  ");
+            	System.out.print("loadDictionary Warning: End of dictionary file reached.  ");
             	System.out.println(nWords + " requested, but only " + numLoaded + " words loaded.");
             }
         } catch (IOException e) {
